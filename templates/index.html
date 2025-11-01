@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Face Emotion Detector</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 720px; margin: 40px auto; }
+    .result { margin-top: 20px; padding: 12px; border-radius: 6px; background: #f4f4f4;}
+    img { max-width: 100%; height: auto; }
+  </style>
+</head>
+<body>
+  <h1>Face Emotion Detector</h1>
+  <p>Upload a photo and we'll tell you what you look like 🙂</p>
+
+  <form id="uploadForm">
+    <label for="image">Choose an image</label>
+    <input type="file" id="image" name="image" accept="image/*" required title="Choose an image to upload" placeholder="Choose an image" />
+    <button type="submit">Analyze</button>
+  </form>
+
+  <div class="result" id="result" style="display:none;">
+    <h3 id="msg"></h3>
+    <p><strong>Emotion:</strong> <span id="emotion"></span></p>
+    <p><strong>Confidence:</strong> <span id="conf"></span></p>
+    <img id="preview" src="" alt="" />
+  </div>
+
+<script>
+document.getElementById('uploadForm').addEventListener('submit', async function(e){
+  e.preventDefault();
+  const fileInput = document.getElementById('image');
+  if (!fileInput.files.length) return alert("Please choose an image.");
+  const formData = new FormData();
+  formData.append('image', fileInput.files[0]);
+  const res = await fetch('/upload', { method: 'POST', body: formData });
+  const data = await res.json();
+  if (!res.ok) {
+    alert(data.error || "Upload failed");
+    return;
+  }
+  document.getElementById('result').style.display = 'block';
+  document.getElementById('msg').textContent = data.message;
+  document.getElementById('emotion').textContent = data.emotion;
+  document.getElementById('conf').textContent = (data.confidence*100).toFixed(1) + "%";
+  document.getElementById('preview').src = data.file;
+});
+</script>
+</body>
+
