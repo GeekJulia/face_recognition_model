@@ -5,6 +5,7 @@ from flask import Flask, request, redirect, url_for, render_template_string, sen
 from werkzeug.utils import secure_filename
 import cv2
 import numpy as np
+import tensorflow as tf
 from tensorflow.keras.models import load_model
 from datetime import datetime
 from PIL import Image
@@ -27,7 +28,7 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # Load model once
 print("Loading model...")
-model = load_model(MODEL_PATH)
+model = load_model(MODEL_PATH, compile=False)
 print("Model loaded from", MODEL_PATH)
 
 # DB init
