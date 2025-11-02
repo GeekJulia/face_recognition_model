@@ -1,7 +1,7 @@
 # model_training.py
 # Downloads a pre-trained Keras model from Hugging Face and saves it as face_emotionModel.h5
 from huggingface_hub import hf_hub_download
-from tensorflow.keras.models import load_model
+from tensorflow import keras
 import shutil
 import os
 
